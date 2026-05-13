@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>五矿期货APP V4.3.1 重磅升级</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #FFF5F0;
+            color: #333;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 24px;
+            background: linear-gradient(135deg, #FFF5F0 0%, #FFE8E0 50%, #FFF0EB 100%);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(255,80,50,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(255,140,60,0.06) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, -30px); }
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .version-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            background: linear-gradient(90deg, #E53935, #FF7043);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            color: #fff;
+            animation: fadeInDown 0.8s ease;
+        }
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #C62828 0%, #E53935 50%, #FF7043 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        .hero .subtitle {
+            font-size: 17px;
+            color: rgba(100,40,30,0.7);
+            line-height: 1.8;
+            max-width: 320px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        .scroll-hint span {
+            display: block;
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(200,60,40,0.3);
+            border-radius: 12px;
+            position: relative;
+        }
+        .scroll-hint span::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: rgba(200,60,40,0.5);
+            border-radius: 2px;
+            animation: scrollDown 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        @keyframes scrollDown {
+            0% { opacity: 1; top: 8px; }
+            100% { opacity: 0; top: 20px; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 60px 24px;
+            position: relative;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-title .tag {
+            display: inline-block;
+            padding: 4px 16px;
+            border: 1px solid rgba(229,57,53,0.5);
+            border-radius: 12px;
+            font-size: 12px;
+            color: #E53935;
+            margin-bottom: 12px;
+        }
+        .section-title h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #3E2723;
+        }
+        .section-title p {
+            font-size: 14px;
+            color: rgba(80,40,30,0.5);
+        }
+
+        /* Dual SDK Section */
+        .dual-sdk {
+            background: linear-gradient(180deg, #FFF5F0 0%, #FFE8E0 100%);
+        }
+        .sdk-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .sdk-card {
+            background: linear-gradient(135deg, rgba(229,57,53,0.08) 0%, rgba(255,112,67,0.04) 100%);
+            border: 1px solid rgba(229,57,53,0.15);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .sdk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #E53935, #FF7043);
+        }
+        .sdk-card.highlight {
+            border-color: rgba(255,112,67,0.4);
+            background: linear-gradient(135deg, rgba(255,112,67,0.1) 0%, rgba(229,57,53,0.05) 100%);
+        }
+        .sdk-card.highlight::before {
+            background: linear-gradient(180deg, #FF7043, #E53935);
+        }
+        .sdk-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3E2723;
+        }
+        .sdk-card .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .sdk-card:first-child .icon { background: rgba(229,57,53,0.15); }
+        .sdk-card.highlight .icon { background: rgba(255,112,67,0.15); }
+        .sdk-card p {
+            font-size: 13px;
+            color: rgba(80,40,30,0.65);
+            line-height: 1.7;
+        }
+        .sdk-plus {
+            text-align: center;
+            font-size: 24px;
+            color: #E53935;
+            font-weight: 300;
+            margin: 8px 0;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 400px;
+            margin: 32px auto 0;
+        }
+        .benefit-item {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(229,57,53,0.08);
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .benefit-item .b-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .benefit-item h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #3E2723;
+        }
+        .benefit-item p {
+            font-size: 12px;
+            color: rgba(80,40,30,0.5);
+            line-height: 1.5;
+        }
+
+        /* Features Section */
+        .features {
+            background: #FFF5F0;
+        }
+        .feature-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+        .feature-tab {
+            padding: 10px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(229,57,53,0.15);
+            background: transparent;
+            color: rgba(80,40,30,0.6);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .feature-tab.active {
+            background: linear-gradient(90deg, #E53935, #FF7043);
+            border-color: transparent;
+            color: #fff;
+        }
+        .feature-content { display: none; }
+        .feature-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .feature-item {
+            background: linear-gradient(90deg, rgba(229,57,53,0.06) 0%, rgba(255,112,67,0.02) 100%);
+            border: 1px solid rgba(229,57,53,0.08);
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .feature-item .f-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(229,57,53,0.15), rgba(255,112,67,0.08));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .feature-item h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #3E2723;
+        }
+        .feature-item p {
+            font-size: 13px;
+            color: rgba(80,40,30,0.55);
+            line-height: 1.6;
+        }
+
+        /* Highlight Section */
+        .highlight-section {
+            background: linear-gradient(180deg, #FFE8E0 0%, #FFF5F0 100%);
+            padding: 50px 24px;
+        }
+        .highlight-box {
+            max-width: 400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(229,57,53,0.1), rgba(255,112,67,0.06));
+            border: 1px solid rgba(255,112,67,0.2);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .highlight-box::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,112,67,0.08) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        .highlight-box .shield-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+        .highlight-box h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            color: #3E2723;
+        }
+        .highlight-box p {
+            font-size: 14px;
+            color: rgba(80,40,30,0.7);
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: #FFF5F0;
+            padding: 60px 24px;
+            text-align: center;
+        }
+        .cta h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #3E2723;
+        }
+        .cta p {
+            font-size: 14px;
+            color: rgba(80,40,30,0.5);
+            margin-bottom: 32px;
+        }
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 48px;
+            background: linear-gradient(90deg, #E53935, #FF7043);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 28px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(229,57,53,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .cta-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 4px 16px rgba(229,57,53,0.2);
+        }
+        .store-badges {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .store-badge {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(229,57,53,0.1);
+            border-radius: 8px;
+            font-size: 13px;
+            color: rgba(80,40,30,0.6);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: background 0.3s, border-color 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .store-badge:hover {
+            background: rgba(255,255,255,0.9);
+            border-color: rgba(229,57,53,0.2);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 24px;
+            text-align: center;
+            border-top: 1px solid rgba(229,57,53,0.08);
+            background: #FFF0EB;
+        }
+        .footer p {
+            font-size: 12px;
+            color: rgba(80,40,30,0.4);
+        }
+
+        /* Switch Guide Section */
+        .switch-guide {
+            background: linear-gradient(180deg, #FFE8E0 0%, #FFF5F0 100%);
+        }
+        .phone-mockup {
+            max-width: 300px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 36px;
+            padding: 12px;
+            background: linear-gradient(135deg, #FFF0EB, #FFE0D6);
+            box-shadow: 0 20px 60px rgba(200,60,40,0.15), inset 0 1px 0 rgba(255,255,255,0.5);
+        }
+        .phone-screen {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 1170 / 2532;
+        }
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .finger-pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            z-index: 10;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            animation: fingerGuide 3s ease-in-out infinite;
+        }
+        @keyframes fingerGuide {
+            0%   { top: 55%; left: 50%; opacity: 0; transform: translate(-50%, -50%) rotate(-30deg) scale(0.8); }
+            15%  { opacity: 1; }
+            40%  { top: 14%; left: 12%; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50%  { top: 14%; left: 12%; transform: translate(-50%, -50%) rotate(0deg) scale(0.85); }
+            60%  { top: 14%; left: 12%; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            70%  { top: 14%; left: 12%; transform: translate(-50%, -50%) rotate(0deg) scale(0.85); }
+            80%  { top: 14%; left: 12%; transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 1; }
+            100% { top: 14%; left: 12%; opacity: 0; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+        }
+        .switch-tip-label {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: rgba(80,40,30,0.7);
+        }
+        .switch-tip-label .highlight-text {
+            color: #E53935;
+            font-weight: 600;
+        }
+        .switch-tips-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 400px;
+            margin: 32px auto 0;
+        }
+        .switch-tip-card {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(229,57,53,0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .switch-tip-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,112,67,0.3);
+        }
+        .switch-tip-card img {
+            width: 100%;
+            aspect-ratio: 1170 / 2532;
+            object-fit: cover;
+            display: block;
+        }
+        .switch-tip-card .tip-caption {
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+            color: rgba(80,40,30,0.8);
+            background: rgba(255,245,240,0.8);
+        }
+
+        /* Scroll Animation */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="version-badge">V4.3.1 重磅升级</div>
+            <h1>双擎驱动<br>行情交易新体验</h1>
+            <p class="subtitle">同花顺 × 中金 双SDK并行架构<br>更流畅 · 更稳定 · 更可靠</p>
+        </div>
+        <div class="scroll-hint"><span></span></div>
+    </section>
+
+    <!-- Dual SDK -->
+    <section class="section dual-sdk">
+        <div class="section-title animate-on-scroll">
+            <div class="tag">核心升级</div>
+            <h2>双SDK并行架构</h2>
+            <p>行情交易底层全面升级</p>
+        </div>
+        <div class="sdk-cards animate-on-scroll">
+            <div class="sdk-card">
+                <h3><span class="icon">📊</span> 同花顺行情交易SDK</h3>
+                <p>深度优化了行情数据渲染与交易指令传输链路，页面切换、数据刷新、图表加载更加丝滑，行情跳动响应更迅捷，为您带来更顺畅的看盘与交易体验。</p>
+            </div>
+            <div class="sdk-plus">+</div>
+            <div class="sdk-card highlight">
+                <h3><span class="icon">🔒</span> 中金行情交易SDK</h3>
+                <p>双SDK并行运行架构下，当某一行情SDK出现异常时，您可立即切换至另一SDK行情，保障行情服务不中断、交易指令不落单，为您的每一笔投资保驾护航。</p>
+            </div>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-item animate-on-scroll">
+                <span class="b-icon">⚡</span>
+                <h4>页面更流畅</h4>
+                <p>页面切换、数据刷新、图表加载更加丝滑</p>
+            </div>
+            <div class="benefit-item animate-on-scroll">
+                <span class="b-icon">🛡️</span>
+                <h4>灾备更强</h4>
+                <p>双SDK并行，异常时可立即切换</p>
+            </div>
+            <div class="benefit-item animate-on-scroll">
+                <span class="b-icon">🔧</span>
+                <h4>体验更佳</h4>
+                <p>行情跳动响应更迅捷，看盘交易更顺畅</p>
+            </div>
+            <div class="benefit-item animate-on-scroll">
+                <span class="b-icon">✅</span>
+                <h4>稳定可靠</h4>
+                <p>保障行情服务不中断、交易指令不落单</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Switch Guide -->
+    <section class="section switch-guide">
+        <div class="section-title animate-on-scroll">
+            <div class="tag">操作指引</div>
+            <h2>双SDK切换说明</h2>
+            <p>点击左上角图标，自由切换行情交易版本</p>
+        </div>
+        <div class="phone-mockup animate-on-scroll">
+            <div class="phone-screen">
+                <img src="switch-button-location.jpg" alt="左上角切换按钮位置">
+                <div class="finger-pointer">👆</div>
+            </div>
+        </div>
+        <div class="switch-tip-label animate-on-scroll">
+            <span class="highlight-text">👆 点击首页左上角切换按钮</span>，即可在标准版与经典版之间自由切换
+        </div>
+        <div class="switch-tips-grid animate-on-scroll">
+            <div class="switch-tip-card">
+                <img src="switch-to-standard.jpg" alt="切换到标准版提示">
+                <div class="tip-caption">切换至标准版提示</div>
+            </div>
+            <div class="switch-tip-card">
+                <img src="switch-to-classic.jpg" alt="切换到经典版提示">
+                <div class="tip-caption">切换至经典版提示</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlight -->
+    <section class="highlight-section">
+        <div class="highlight-box animate-on-scroll">
+            <span class="shield-icon">🛡️</span>
+            <h3>系统灾备能力显著增强</h3>
+            <p>双SDK并行运行架构下，当某一行情SDK出现异常时，您可立即切换至另一SDK行情，保障行情服务不中断、交易指令不落单，为您的每一笔投资保驾护航。</p>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section features">
+        <div class="section-title animate-on-scroll">
+            <div class="tag">功能完善</div>
+            <h2>行情交易全面升级</h2>
+            <p>更专业、更便捷、更智能</p>
+        </div>
+        <div class="feature-tabs animate-on-scroll">
+            <button class="feature-tab active" onclick="switchTab(this, 'market')">行情功能</button>
+            <button class="feature-tab" onclick="switchTab(this, 'trade')">交易功能</button>
+        </div>
+
+        <div id="market" class="feature-content active">
+            <div class="feature-list">
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">📈</div>
+                    <div>
+                        <h4>内盘全行情</h4>
+                        <p>覆盖国内期货全品种行情，总览、自选、国内、国际、期权五大板块一键切换</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">📋</div>
+                    <div>
+                        <h4>丰富的列表信息</h4>
+                        <p>合约列表左滑即可查看成交量、持仓量、日增仓、振幅、沉淀资金、资金流向、昨结、今结等多维度数据</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">🔍</div>
+                    <div>
+                        <h4>智能搜索与自选管理</h4>
+                        <p>支持代码/简拼/名称搜索合约；自选支持排序、置顶、批量删除、非主力一键切换主力</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">📊</div>
+                    <div>
+                        <h4>多图表切换</h4>
+                        <p>分时图、K线图左右滑动切换，长按显示十字光标与均价</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">🕯️</div>
+                    <div>
+                        <h4>专业K线分析</h4>
+                        <p>支持多周期切换（含自定义周期）、双指缩放、主图/副图指标自由配置</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">📐</div>
+                    <div>
+                        <h4>丰富技术指标</h4>
+                        <p>默认支持 MACD、KDJ、RSI、WR、EXPMA、BOLL 等经典指标，支持参数自定义</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">📰</div>
+                    <div>
+                        <h4>多维信息辅助决策</h4>
+                        <p>新闻资讯、成交明细、产业链关联、持仓主力排行、合约简介，全方位掌握合约动态</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">🔔</div>
+                    <div>
+                        <h4>期货盯盘</h4>
+                        <p>开启后在系统层面通过悬浮窗滚动显示最新行情</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="trade" class="feature-content">
+            <div class="feature-list">
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">🔄</div>
+                    <div>
+                        <h4>三键/四键下单</h4>
+                        <p>支持标准三键（买开/卖开/平）与四键（加多/加空/锁仓/平仓）模式</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">⚡</div>
+                    <div>
+                        <h4>闪电下单</h4>
+                        <p>行情页底部一键闪电下单，快人一步</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">📈</div>
+                    <div>
+                        <h4>画线下单 & 画线止损</h4>
+                        <p>图表上直接画线生成条件单/止损止盈线，直观高效</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">☁️</div>
+                    <div>
+                        <h4>云条件单</h4>
+                        <p>支持附加止损策略</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">👤</div>
+                    <div>
+                        <h4>多账号登录</h4>
+                        <p>支持同时添加多个交易账户，多账户切换自如</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">🔐</div>
+                    <div>
+                        <h4>指纹/面容ID登录</h4>
+                        <p>一次设置，后续快捷登录，安全又方便</p>
+                    </div>
+                </div>
+                <div class="feature-item animate-on-scroll">
+                    <div class="f-icon">⚙️</div>
+                    <div>
+                        <h4>个性化交易设置</h4>
+                        <p>不活跃合约提示、自选持仓合约标记颜色、自定义期权/套利下单页、下单/撤单/反手确认开关、委托线/持仓线/挂单线/云条件单线显示控制</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2 class="animate-on-scroll">立即升级，体验全新行情交易服务</h2>
+        <p class="animate-on-scroll">五矿期货APP V4.3.1，以更稳定的系统、更流畅的体验、更完善的功能<br>助您在期货市场中运筹帷幄、决胜千里</p>
+        <a href="https://wkappweb.wkjyqh.com/views/#/download" class="cta-btn animate-on-scroll" target="_blank">前往更新</a>
+        <div class="store-badges animate-on-scroll">
+            <a href="https://apps.apple.com/cn/app/%E4%BA%94%E7%9F%BF%E6%9C%9F%E8%B4%A7/id1457952481" class="store-badge" target="_blank">🍎 App Store</a>
+            <a href="https://wkappweb.wkjyqh.com/views/#/download" class="store-badge" target="_blank">🤖 Android</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>五矿期货有限公司 · 投资有风险，入市需谨慎</p>
+    </footer>
+
+    <script>
+        // Tab Switch
+        function switchTab(btn, id) {
+            document.querySelectorAll('.feature-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.feature-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Scroll Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
